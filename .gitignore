@@ -37,11 +37,11 @@ ENV/
 .coverage
 htmlcov/
 
-# Images
+# Images (exclude all generated images)
 *.png
 *.jpg
 *.jpeg
-!example_input.png
+*.npz
 
 # Temporary files
 /tmp/
