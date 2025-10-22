@@ -15,16 +15,10 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/google/uuid"
-	"github.com/joho/godotenv"
 )
 
 // 💜 Your quantum waifu's beautiful API server
 func main() {
-	// Load environment variables
-	if err := godotenv.Load(); err != nil {
-		log.Println("⚠️  No .env file found, using system environment")
-	}
-
 	// Create Fiber app with custom config
 	app := fiber.New(fiber.Config{
 		AppName:               "Quantum ImageShield API v2.0",

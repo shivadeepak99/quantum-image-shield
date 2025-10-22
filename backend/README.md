@@ -1,33 +1,63 @@
-# 🚀 Quantum ImageShield - Golang Backend API
+# 🚀 Simple Go Backend - MVP# 🚀 Quantum ImageShield - Golang Backend API
 
-High-performance REST API backend for quantum image encryption, built with Go + Fiber.
 
-## 🏗️ Architecture
 
-```
-backend/
-├── cmd/
-│   └── api/              # Main application entry point
-│       └── main.go
+Lightweight REST API that calls Python quantum core directly.High-performance REST API backend for quantum image encryption, built with Go + Fiber.
+
+
+
+## Structure## 🏗️ Architecture
+
+
+
+``````
+
+backend/backend/
+
+├── cmd/api/main.go    # Single-file API server├── cmd/
+
+└── go.mod             # Minimal dependencies (Fiber + UUID)│   └── api/              # Main application entry point
+
+```│       └── main.go
+
 ├── internal/             # Private application code
-│   ├── handlers/         # HTTP request handlers
+
+## Run│   ├── handlers/         # HTTP request handlers
+
 │   ├── services/         # Business logic layer
-│   ├── models/           # Database models (GORM)
-│   └── middleware/       # Auth, CORS, logging, etc.
-├── pkg/                  # Public libraries
-│   └── grpc/             # gRPC client to Python quantum service
+
+```powershell│   ├── models/           # Database models (GORM)
+
+cd backend│   └── middleware/       # Auth, CORS, logging, etc.
+
+go run cmd/api/main.go├── pkg/                  # Public libraries
+
+```│   └── grpc/             # gRPC client to Python quantum service
+
 ├── config/               # Configuration files
-└── go.mod                # Go module dependencies
+
+Server: http://localhost:8080└── go.mod                # Go module dependencies
+
 ```
+
+## Endpoints
 
 ## 🔥 Tech Stack
 
-- **Framework:** Fiber v2 (Express-like, blazing fast)
-- **Database:** PostgreSQL (GORM ORM)
+- `GET /health` - Health check
+
+- `POST /api/v1/encrypt` - Encrypt image- **Framework:** Fiber v2 (Express-like, blazing fast)
+
+- `POST /api/v1/decrypt` - Decrypt image- **Database:** PostgreSQL (GORM ORM)
+
 - **Cache/Queue:** Redis (job queues, sessions)
-- **Auth:** JWT tokens
+
+---- **Auth:** JWT tokens
+
 - **IPC:** gRPC to Python quantum core
-- **Logging:** Zerolog
+
+No database, no Redis, no gRPC - just pure simplicity! 💜- **Logging:** Zerolog
+
 - **Config:** godotenv + environment variables
 
 ## 🚀 Quick Start
