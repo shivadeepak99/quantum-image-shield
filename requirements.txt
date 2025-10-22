@@ -1,0 +1,9 @@
+qiskit 
+qiskit-aer 
+numpy
+opencv-python
+pillow
+streamlit
+scikit-image
+matplotlib
+tqdm
