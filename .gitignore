@@ -25,7 +25,7 @@ venv/
 env/
 ENV/
 
-# IDE
+
 .vscode/
 .idea/
 *.swp
@@ -49,3 +49,12 @@ samples/encrypted_image.png
 samples/decrypted_image.png
 output/
 temp/
+# Images (exclude all generated images)
+*.png
+*.jpg
+*.jpeg
+*.npz
+
+# Temporary files
+/tmp/
+*.tmp
