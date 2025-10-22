@@ -39,16 +39,15 @@ func main() {
 		TimeZone:   "Local",
 	}))
 
-	// CORS
+	// CORS - Allow everything for MVP
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     getEnv("ALLOWED_ORIGINS", "http://localhost:3000"),
-		AllowMethods:     getEnv("ALLOWED_METHODS", "GET,POST,PUT,DELETE,OPTIONS"),
-		AllowHeaders:     getEnv("ALLOWED_HEADERS", "Content-Type,Authorization"),
-		AllowCredentials: true,
+		AllowOrigins: "*",
+		AllowMethods: "GET,POST,PUT,DELETE,OPTIONS",
+		AllowHeaders: "Origin,Content-Type,Accept,Authorization",
 	}))
 
 	// ===== ROUTES =====
-	
+
 	// Health check
 	app.Get("/health", healthCheckHandler)
 	app.Get("/", rootHandler)
@@ -57,13 +56,13 @@ func main() {
 	v1 := app.Group("/api/v1")
 	{
 		// Encryption endpoints
-		v1.Post("/encrypt", encryptHandler)          // TODO: Implement
-		v1.Post("/decrypt", decryptHandler)          // TODO: Implement
+		v1.Post("/encrypt", encryptHandler)            // TODO: Implement
+		v1.Post("/decrypt", decryptHandler)            // TODO: Implement
 		v1.Post("/batch/encrypt", batchEncryptHandler) // TODO: Implement
 
 		// Job management
 		v1.Get("/jobs/:job_id", getJobStatusHandler) // TODO: Implement
-		
+
 		// Authentication (future)
 		// auth := v1.Group("/auth")
 		// auth.Post("/register", registerHandler)
@@ -83,12 +82,12 @@ func main() {
 		<-sigChan
 
 		log.Println("\n🌸 Gracefully shutting down quantum waifu server...")
-		
+
 		// Give requests 10s to complete
 		if err := app.ShutdownWithTimeout(10 * time.Second); err != nil {
 			log.Fatalf("❌ Server forced shutdown: %v", err)
 		}
-		
+
 		log.Println("✨ Server shutdown complete. Sayonara, CEO-sama~")
 		os.Exit(0)
 	}()
@@ -96,7 +95,7 @@ func main() {
 	// ===== START SERVER =====
 	port := getEnv("PORT", "8080")
 	banner()
-	
+
 	log.Printf("🚀 Server starting on http://localhost:%s\n", port)
 	if err := app.Listen(":" + port); err != nil {
 		log.Fatalf("❌ Server startup failed: %v", err)
@@ -124,14 +123,19 @@ func healthCheckHandler(c *fiber.Ctx) error {
 }
 
 func encryptHandler(c *fiber.Ctx) error {
+	log.Println("🔒 Encryption request received!")
+
 	// Get uploaded file
 	file, err := c.FormFile("image")
 	if err != nil {
+		log.Printf("❌ Failed to get file: %v\n", err)
 		return c.Status(400).JSON(fiber.Map{
 			"error":   "Bad Request",
 			"message": "Image file required",
 		})
 	}
+
+	log.Printf("📁 File received: %s (%.2f MB)\n", file.Filename, float64(file.Size)/1024/1024)
 
 	// Validate file size (50MB max)
 	if file.Size > 50*1024*1024 {
@@ -173,7 +177,7 @@ func encryptHandler(c *fiber.Ctx) error {
 		"--purity", purity,
 	)
 	pythonCmd.Dir = filepath.Join("..", "..") // Go to project root
-	
+
 	output, err := pythonCmd.CombinedOutput()
 	if err != nil {
 		log.Printf("Python encryption failed: %s\n%s", err, output)
@@ -239,7 +243,7 @@ func decryptHandler(c *fiber.Ctx) error {
 		"--key", keyPath,
 	)
 	pythonCmd.Dir = filepath.Join("..", "..")
-	
+
 	output, err := pythonCmd.CombinedOutput()
 	if err != nil {
 		log.Printf("Python decryption failed: %s\n%s", err, output)
@@ -268,7 +272,7 @@ func batchEncryptHandler(c *fiber.Ctx) error {
 
 func getJobStatusHandler(c *fiber.Ctx) error {
 	jobID := c.Params("job_id")
-	
+
 	// TODO: Query job from database/Redis
 	return c.JSON(fiber.Map{
 		"job_id":  jobID,

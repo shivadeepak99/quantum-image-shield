@@ -62,12 +62,18 @@ export default function Home() {
     formData.append('purity', purity);
 
     try {
+      console.log('🚀 Sending encryption request...');
       const response = await axios.post('http://localhost:8080/api/v1/encrypt', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: { 
+          'Content-Type': 'multipart/form-data',
+        },
+        timeout: 120000, // 2 minute timeout
       });
+      console.log('✅ Response:', response.data);
       setResult(response.data);
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Encryption failed');
+      console.error('❌ Error:', err);
+      setError(err.response?.data?.message || err.message || 'Encryption failed');
     } finally {
       setLoading(false);
     }
