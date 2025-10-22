@@ -1,212 +1,209 @@
-# Quantum-Seed ImageShield
+# 🔐 Quantum-Seed ImageShield
 
 A hybrid quantum-classical image encryption system that leverages quantum-generated randomness to enhance security and unpredictability in digital image encryption.
 
-## Overview
+## 🌟 Overview
 
-Quantum-Seed ImageShield combines quantum key generation using **Qiskit** with classical encryption techniques to create a robust image encryption system. The system demonstrates a practical application of quantum computing in modern cryptography by:
+**Quantum-Seed ImageShield** combines quantum key generation using IBM's Qiskit platform with classical encryption techniques (XOR operations and pixel permutations) to demonstrate a practical application of quantum computing in modern cryptography.
 
-- **Quantum Key Generation**: Using quantum circuits with superposition states to generate truly random keys
-- **XOR Encryption**: Applying bitwise XOR operations with quantum-generated keys
-- **Pixel Permutation**: Shuffling pixels based on quantum randomness for additional security
+### Key Features
 
-## Features
+- 🔬 **Quantum Key Generation**: Uses Hadamard gates and measurements to generate truly random cryptographic keys
+- 🔐 **Hybrid Encryption**: Combines XOR operations with quantum keystreams and pixel permutation
+- 📊 **Comprehensive Analysis**: Evaluates encryption quality through entropy, histogram uniformity, correlation, and PSNR metrics
+- 🎨 **Interactive Demo**: User-friendly Streamlit interface for visualizing encryption/decryption process
+- ✅ **Reversible**: Perfect reconstruction of original images after decryption
 
-✨ **True Quantum Randomness**: Keys are generated using quantum measurements of superposition states  
-🔐 **Hybrid Encryption**: Combines quantum and classical techniques for robust security  
-🖼️ **Lossless Encryption**: Perfect recovery of original images after decryption  
-🎨 **Format Support**: Works with various image formats (PNG, JPEG, etc.)  
-🧪 **Fully Tested**: Comprehensive test suite included  
-📦 **Easy to Use**: Simple CLI and Python API
+## 🏗️ Architecture
 
-## Installation
+```
+┌─────────────────────────────────────────────────────────┐
+│                    Input Image                          │
+│                  (Grayscale)                            │
+└────────────────┬────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────┐
+│             Quantum Key Generation                      │
+│   (Qiskit - Hadamard Gates + Measurements)              │
+│   - Generates random keystream                          │
+│   - Generates permutation seed                          │
+└────────────────┬────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────┐
+│                  Encryption                             │
+│   1. XOR with quantum keystream                         │
+│   2. Pixel permutation                                  │
+└────────────────┬────────────────────────────────────────┘
+                 │
+                 ▼
+┌─────────────────────────────────────────────────────────┐
+│               Encrypted Image                           │
+└─────────────────────────────────────────────────────────┘
+```
+
+## 🚀 Installation
 
 ### Prerequisites
 
 - Python 3.8 or higher
 - pip package manager
 
-### Install Dependencies
+### Setup
 
+1. Clone the repository:
+```bash
+git clone https://github.com/shivadeepak99/quantum-image-shield.git
+cd quantum-image-shield
+```
+
+2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-The main dependencies are:
-- `qiskit`: Quantum computing framework
-- `qiskit-aer`: Quantum circuit simulator
-- `numpy`: Numerical operations
-- `pillow`: Image processing
+## 💻 Usage
 
-## Usage
+### Command Line Interface
 
-### Command-Line Interface
-
-#### Encrypt an Image
-
+1. Generate a sample image:
 ```bash
-python -m quantum_image_shield.cli encrypt input.png encrypted.png
+python generate_sample_image.py
+```
+
+2. Run the test suite:
+```bash
+python test_encryption.py
 ```
 
 This will:
-- Encrypt the image using quantum-generated keys
-- Save the encrypted image to `encrypted.png`
-- Save encryption keys to `encrypted_keys.npz`
+- Load/generate a sample image
+- Generate quantum keys using Qiskit
+- Encrypt the image
+- Decrypt the image
+- Verify perfect reconstruction
+- Display comprehensive analysis metrics
 
-You can also specify a custom key file location:
+### Web Interface (Streamlit)
 
+Launch the interactive demo:
 ```bash
-python -m quantum_image_shield.cli encrypt input.png encrypted.png --key my_keys.npz
+streamlit run app.py
 ```
 
-#### Decrypt an Image
+The web interface allows you to:
+- Upload your own images
+- Generate quantum keys and encrypt images
+- Decrypt images and verify reconstruction
+- View detailed statistical analysis
+- Compare histograms and correlation plots
+- Analyze encryption quality metrics
 
-```bash
-python -m quantum_image_shield.cli decrypt encrypted.png decrypted.png --key encrypted_keys.npz
-```
+## 📊 Encryption Quality Metrics
 
-### Python API
+The system evaluates encryption quality through several metrics:
 
-```python
-from quantum_image_shield import ImageEncryptor, ImageDecryptor
+### 1. **Entropy**
+- Measures randomness in pixel values
+- Higher entropy (closer to 8 bits) indicates better encryption
+- Expected: Significant increase after encryption
 
-# Encrypt an image
-encryptor = ImageEncryptor()
-xor_key, permutation_key = encryptor.encrypt_image(
-    'input.png',
-    'encrypted.png',
-    'keys.npz'
-)
+### 2. **Histogram Uniformity**
+- Measures how evenly pixel values are distributed
+- Range: 0 to 1 (1 = perfectly uniform)
+- Expected: More uniform distribution after encryption
 
-# Decrypt the image
-decryptor = ImageDecryptor()
-decryptor.decrypt_image(
-    'encrypted.png',
-    'decrypted.png',
-    key_path='keys.npz'
-)
-```
+### 3. **Correlation Coefficient**
+- Measures similarity between adjacent pixels
+- Range: -1 to 1 (0 = no correlation)
+- Calculated for horizontal, vertical, and diagonal directions
+- Expected: Near-zero correlation after encryption
 
-### Example Script
+### 4. **PSNR (Peak Signal-to-Noise Ratio)**
+- Measures quality of decrypted image vs. original
+- Higher is better; ∞ means perfect reconstruction
+- Expected: ∞ (perfect reconstruction)
 
-Run the included example to see the system in action:
+## 🔬 Technical Details
 
-```bash
-cd examples
-python example_usage.py
-```
+### Quantum Key Generation
 
-This will:
-1. Create a sample image
-2. Encrypt it using quantum-generated keys
-3. Decrypt it back to the original
-4. Verify the encryption/decryption cycle
+The system uses quantum circuits to generate truly random keys:
 
-## How It Works
+1. **Circuit Construction**: Creates quantum circuits with Hadamard gates
+2. **Superposition**: Applies Hadamard gates to put qubits in superposition
+3. **Measurement**: Measures qubits to collapse superposition into random bits
+4. **Key Derivation**: Converts random bits into keystream and permutation seed
 
-### 1. Quantum Key Generation
+### Encryption Process
 
-The system uses Qiskit to create quantum circuits with Hadamard gates, which put qubits into superposition states. When measured, these qubits collapse to either 0 or 1 with true randomness:
+1. **XOR Operation**: Each pixel is XORed with corresponding keystream byte
+2. **Pixel Permutation**: Pixels are shuffled using quantum-derived seed
+3. **Result**: Encrypted image with high entropy and low correlation
 
-```
-|0⟩ --[H]-- → (|0⟩ + |1⟩)/√2 --[Measure]-- → 0 or 1 (50% probability)
-```
+### Decryption Process
 
-This quantum randomness is used to generate:
-- **XOR keys**: Random byte sequences for encryption
-- **Permutation keys**: Random shuffling patterns for pixels
+1. **Reverse Permutation**: Pixels are unshuffled using the same seed
+2. **XOR Operation**: Applied again (XOR is self-inverse)
+3. **Result**: Perfect reconstruction of original image
 
-### 2. Classical Encryption
-
-The classical encryption process involves two steps:
-
-**Step 1: XOR Encryption**
-- Each pixel value is XORed with a quantum-generated key byte
-- This provides the primary encryption layer
-
-**Step 2: Pixel Permutation**
-- Pixels are shuffled according to a quantum-generated permutation
-- This adds confusion and diffusion to the encrypted image
-
-### 3. Decryption
-
-Decryption reverses the process:
-1. **Unpermute**: Restore original pixel positions
-2. **XOR**: Apply the same XOR key (XOR is self-inverse)
-
-## Architecture
+## 📁 Project Structure
 
 ```
-quantum_image_shield/
-├── __init__.py                    # Package initialization
-├── quantum_key_generator.py       # Quantum key generation using Qiskit
-├── encryption.py                  # Image encryption module
-├── decryption.py                  # Image decryption module
-└── cli.py                         # Command-line interface
-
-tests/
-├── test_quantum_key_generator.py  # Tests for quantum key generation
-└── test_encryption_decryption.py  # Tests for encryption/decryption
-
-examples/
-└── example_usage.py               # Example usage demonstration
+quantum-image-shield/
+├── app.py                      # Streamlit web interface
+├── quantum_key_generator.py    # Quantum key generation module
+├── image_encryptor.py          # Encryption/decryption module
+├── image_analysis.py           # Statistical analysis module
+├── test_encryption.py          # Test suite
+├── generate_sample_image.py    # Sample image generator
+├── requirements.txt            # Python dependencies
+├── samples/                    # Sample images directory
+│   ├── sample_image.png
+│   ├── encrypted_image.png
+│   └── decrypted_image.png
+└── README.md                   # This file
 ```
 
-## Security Considerations
+## 🎯 Expected Results
 
-- **Key Storage**: Encryption keys must be stored securely. Without the keys, decryption is not possible.
-- **Quantum Randomness**: True randomness from quantum measurements provides superior unpredictability compared to classical PRNGs.
-- **XOR Security**: XOR encryption is secure when used with truly random keys that are as long as the data.
-- **Permutation**: Adds an additional layer of security through pixel shuffling.
+A well-encrypted image should exhibit:
 
-## Testing
+- ✅ **High Entropy**: Close to 8 bits (maximum for 8-bit images)
+- ✅ **Uniform Histogram**: Flat distribution across all pixel values
+- ✅ **Low Correlation**: Near-zero correlation between adjacent pixels
+- ✅ **Perfect Decryption**: PSNR = ∞ (identical to original)
 
-Run the test suite:
+## 🔐 Security Considerations
 
-```bash
-# Run all tests
-python -m pytest tests/
+- Uses quantum-generated randomness for enhanced unpredictability
+- XOR encryption provides confusion (scrambles pixel values)
+- Permutation provides diffusion (spreads information across image)
+- Keys must be kept secret and transmitted securely
+- Same key required for decryption (symmetric encryption)
 
-# Run specific test file
-python -m pytest tests/test_quantum_key_generator.py
+## 🤝 Contributing
 
-# Run with verbose output
-python -m pytest -v tests/
+Contributions are welcome! Please feel free to submit issues or pull requests.
 
-# Run with unittest
-python -m unittest discover tests/
-```
+## 📄 License
 
-## Requirements
+This project is open-source and available under the MIT License.
 
-See `requirements.txt` for all dependencies:
-- qiskit >= 0.45.0
-- qiskit-aer >= 0.13.0
-- numpy >= 1.24.0
-- pillow >= 10.0.0
+## 🙏 Acknowledgments
 
-## Contributing
+- IBM Qiskit team for quantum computing framework
+- Quantum computing research community
+- Classical cryptography principles
 
-Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
+## 📚 References
 
-## License
-
-This project is open source and available for educational and research purposes.
-
-## Acknowledgments
-
-- **Qiskit**: IBM's quantum computing framework
-- Quantum computing community for advancing quantum cryptography research
-
-## Future Enhancements
-
-Potential areas for expansion:
-- Quantum key distribution (QKD) integration
-- Support for video encryption
-- Hardware quantum computer integration
-- Additional classical encryption algorithms
-- Performance optimizations for large images
+- Qiskit Documentation: https://qiskit.org/
+- Quantum Random Number Generation
+- Image Encryption Techniques
+- Cryptographic Analysis Methods
 
 ---
 
-**Note**: This project demonstrates the practical application of quantum computing in cryptography. While the system uses quantum-generated randomness for enhanced security, it should be evaluated by security experts before use in production environments.
+**Note**: This is a demonstration project showcasing the intersection of quantum computing, cybersecurity, and digital imaging. For production use, additional security measures and key management protocols should be implemented.

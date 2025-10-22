@@ -25,18 +25,30 @@ venv/
 env/
 ENV/
 
-# IDEs
+
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/
+
 # Testing
 .pytest_cache/
 .coverage
 htmlcov/
 
+# Output files (exclude generated test outputs but keep sample_image.png)
+samples/encrypted_image.png
+samples/decrypted_image.png
+output/
+temp/
 # Images (exclude all generated images)
 *.png
 *.jpg
