@@ -44,8 +44,8 @@ Thumbs.db
 .coverage
 htmlcov/
 
-# Output files
-encrypted_*.png
-decrypted_*.png
+# Output files (exclude generated test outputs but keep sample_image.png)
+samples/encrypted_image.png
+samples/decrypted_image.png
 output/
 temp/
