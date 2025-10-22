@@ -17,16 +17,23 @@ class ImageEncryptor:
     The encryption process involves:
     1. XOR operation with quantum-generated key
     2. Pixel permutation (shuffling) based on quantum randomness
+    
+    Supports both file-based and array-based workflows.
     """
     
-    def __init__(self, quantum_seed: int = None):
+    def __init__(self, quantum_seed: int = None, quantum_purity: str = 'balanced'):
         """
         Initialize the Image Encryptor.
         
         Args:
-            quantum_seed: Optional seed for quantum key generation
+            quantum_seed: Optional seed for quantum key generation (testing only)
+            quantum_purity: Quantum purity level - 'maximum', 'balanced', or 'fast'
+                           Default: 'balanced' (recommended for production)
         """
         self.key_generator = QuantumKeyGenerator(seed=quantum_seed)
+        self.quantum_purity = quantum_purity
+        self.last_xor_key = None
+        self.last_permutation_key = None
     
     def encrypt_image(self, image_path: str, output_path: str, key_path: str = None) -> Tuple[bytes, np.ndarray]:
         """
@@ -58,7 +65,10 @@ class ImageEncryptor:
         xor_encrypted = self._xor_encrypt(flat_img, xor_key)
         
         # Step 3: Generate quantum random permutation
-        permutation_key = self.key_generator.generate_permutation_key(len(xor_encrypted))
+        permutation_key = self.key_generator.generate_permutation_key(
+            len(xor_encrypted), 
+            purity=self.quantum_purity
+        )
         
         # Step 4: Apply pixel permutation
         permuted = self._permute_pixels(xor_encrypted, permutation_key)
@@ -75,6 +85,60 @@ class ImageEncryptor:
             self._save_keys(key_path, xor_key, permutation_key, original_shape, original_mode)
         
         return xor_key, permutation_key
+    
+    def encrypt_array(self, image_array: np.ndarray) -> np.ndarray:
+        """
+        Encrypt a numpy array directly (for in-memory processing).
+        
+        This method is useful for Streamlit apps, batch processing,
+        or when you want to work with arrays instead of files.
+        
+        Args:
+            image_array: Numpy array representing the image
+            
+        Returns:
+            Encrypted numpy array with same shape as input
+            
+        Note:
+            Keys are stored in self.last_xor_key and self.last_permutation_key
+            for later decryption.
+        """
+        # Store original shape
+        original_shape = image_array.shape
+        flat_img = image_array.flatten()
+        
+        # Generate quantum random XOR key
+        xor_key = self.key_generator.generate_key(len(flat_img))
+        
+        # Apply XOR encryption
+        xor_encrypted = self._xor_encrypt(flat_img, xor_key)
+        
+        # Generate quantum random permutation
+        permutation_key = self.key_generator.generate_permutation_key(
+            len(xor_encrypted),
+            purity=self.quantum_purity
+        )
+        
+        # Apply pixel permutation
+        permuted = self._permute_pixels(xor_encrypted, permutation_key)
+        
+        # Store keys for later decryption
+        self.last_xor_key = xor_key
+        self.last_permutation_key = permutation_key
+        
+        # Reshape back to original shape
+        return permuted.reshape(original_shape)
+    
+    def get_last_keys(self) -> Tuple[bytes, np.ndarray]:
+        """
+        Get the keys from the last array encryption.
+        
+        Returns:
+            Tuple of (xor_key, permutation_key)
+        """
+        if self.last_xor_key is None or self.last_permutation_key is None:
+            raise ValueError("No encryption has been performed yet")
+        return self.last_xor_key, self.last_permutation_key
     
     def _xor_encrypt(self, data: np.ndarray, key: bytes) -> np.ndarray:
         """
@@ -119,10 +183,14 @@ class ImageEncryptor:
             'xor_key': xor_key,
             'permutation_key': permutation_key,
             'shape': shape,
-            'mode': mode
+            'mode': mode,
+            'quantum_purity': self.quantum_purity,
+            'version': '2.0'
         }
         np.savez_compressed(key_path, 
                           xor_key=np.frombuffer(xor_key, dtype=np.uint8),
                           permutation_key=permutation_key,
                           shape=np.array(shape),
-                          mode=mode)
+                          mode=mode,
+                          quantum_purity=self.quantum_purity,
+                          version='2.0')

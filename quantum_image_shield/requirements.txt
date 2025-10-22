@@ -1,0 +1,11 @@
+# Quantum-Seed ImageShield - Production Requirements
+
+# Quantum computing
+qiskit==1.2.4
+qiskit-aer==0.15.1
+
+# Image processing  
+Pillow==10.4.0
+numpy==1.26.4
+
+# No additional dependencies needed for core CLI

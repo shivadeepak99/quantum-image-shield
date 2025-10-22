@@ -103,24 +103,90 @@ class QuantumKeyGenerator:
         
         return bytes(key)
     
-    def generate_permutation_key(self, size: int) -> np.ndarray:
+    def generate_permutation_key(self, size: int, purity: str = 'balanced') -> np.ndarray:
         """
         Generate a quantum random permutation for pixel shuffling.
         
         Args:
             size: Size of the permutation (number of elements)
+            purity: Quantum purity level - 'maximum', 'balanced', or 'fast'
+                   - 'maximum': Pure quantum Fisher-Yates (slow, most secure)
+                   - 'balanced': 256-bit quantum seed + CSPRNG (recommended)
+                   - 'fast': 128-bit quantum seed + fast shuffle (development)
             
         Returns:
             Random permutation array
         """
-        # Generate enough random bits for shuffling
-        # We need log2(size!) bits, but we'll use a simpler approach
-        # Generate random bytes and use them to seed numpy's shuffle
-        num_bytes = max(size // 2, 16)
-        random_bytes = self.generate_key(num_bytes)
+        if purity == 'maximum':
+            return self._generate_pure_quantum_permutation(size)
+        elif purity == 'balanced':
+            return self._generate_hybrid_quantum_permutation(size, seed_bits=256)
+        elif purity == 'fast':
+            return self._generate_hybrid_quantum_permutation(size, seed_bits=128)
+        else:
+            raise ValueError(f"Invalid purity level: {purity}. Use 'maximum', 'balanced', or 'fast'")
+    
+    def _generate_pure_quantum_permutation(self, size: int) -> np.ndarray:
+        """
+        Generate TRUE quantum permutation using Fisher-Yates with quantum randomness.
         
-        # Use quantum random bytes to seed numpy for permutation
-        rng = np.random.RandomState(int.from_bytes(random_bytes[:4], 'big'))
+        This is the most secure but slowest method. Each swap decision uses
+        fresh quantum random bits.
+        
+        Args:
+            size: Size of the permutation
+            
+        Returns:
+            Pure quantum random permutation
+        """
+        permutation = np.arange(size)
+        
+        for i in range(size - 1, 0, -1):
+            # Calculate bits needed to select index in range [0, i]
+            bits_needed = int(np.ceil(np.log2(i + 1)))
+            
+            # Generate quantum random index with rejection sampling
+            # to ensure uniform distribution
+            while True:
+                random_bits = self.generate_random_bits(bits_needed)
+                # Convert bits to integer
+                j = sum([bit << idx for idx, bit in enumerate(random_bits)])
+                
+                # Accept only if in valid range (rejection sampling)
+                if j <= i:
+                    break
+            
+            # Swap elements
+            permutation[i], permutation[j] = permutation[j], permutation[i]
+        
+        return permutation
+    
+    def _generate_hybrid_quantum_permutation(self, size: int, seed_bits: int = 256) -> np.ndarray:
+        """
+        Generate permutation using quantum seed + cryptographically secure PRNG.
+        
+        This balances quantum security with performance. Uses high-entropy
+        quantum seed (256 or 128 bits) to initialize a secure random generator.
+        
+        Args:
+            size: Size of the permutation
+            seed_bits: Number of quantum random bits for seed (128 or 256)
+            
+        Returns:
+            Quantum-seeded secure permutation
+        """
+        # Generate quantum random seed
+        num_bytes = seed_bits // 8
+        quantum_seed_bytes = self.generate_key(num_bytes)
+        
+        # Convert to integer seed
+        quantum_seed = int.from_bytes(quantum_seed_bytes, byteorder='big')
+        
+        # Use numpy's PCG64 generator (cryptographically strong PRNG)
+        # This is MUCH better than the old RandomState with Mersenne Twister
+        rng = np.random.Generator(np.random.PCG64(quantum_seed))
+        
+        # Generate permutation using secure shuffle
         permutation = np.arange(size)
         rng.shuffle(permutation)
         

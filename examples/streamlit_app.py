@@ -9,20 +9,39 @@ import streamlit as st
 import numpy as np
 from PIL import Image
 import io
+import sys
+import os
 
-# Import our modules
-from quantum_key_generator import generate_quantum_key
-from image_encryptor import (
-    ImageEncryptor, 
-    load_image_as_grayscale, 
-    array_to_image_bytes
-)
-from image_analysis import (
+# Add parent directory to path to import the package
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+# Import from the unified package
+from quantum_image_shield import QuantumKeyGenerator, ImageEncryptor, ImageDecryptor
+from quantum_image_shield.analysis import (
     analyze_image,
     calculate_psnr,
     generate_histogram_plot,
     generate_correlation_plot
 )
+
+
+# Helper functions for the Streamlit app
+def load_image_as_grayscale(image_path_or_bytes):
+    """Load an image and convert to grayscale numpy array."""
+    if isinstance(image_path_or_bytes, bytes):
+        image = Image.open(io.BytesIO(image_path_or_bytes))
+    else:
+        image = Image.open(image_path_or_bytes)
+    grayscale = image.convert('L')
+    return np.array(grayscale, dtype=np.uint8)
+
+
+def array_to_image_bytes(image_array):
+    """Convert numpy array to image bytes (for Streamlit display)."""
+    image = Image.fromarray(image_array.astype(np.uint8), mode='L')
+    buf = io.BytesIO()
+    image.save(buf, format='PNG')
+    return buf.getvalue()
 
 
 def main():
@@ -78,31 +97,22 @@ def main():
         
         if st.button("🔑 Generate Quantum Keys & Encrypt", type="primary"):
             with st.spinner("Generating quantum keys using Qiskit..."):
-                # Generate quantum keys
-                image_size = original_array.size
-                keystream, permutation_seed = generate_quantum_key(
-                    image_size, 
-                    seed=seed_value if use_seed else None
-                )
+                # Use the unified package's array-based API
+                encryptor = ImageEncryptor(quantum_seed=seed_value if use_seed else None)
+                encrypted_array = encryptor.encrypt_array(original_array)
+                
+                # Get the keys that were generated
+                xor_key, permutation_key = encryptor.get_last_keys()
                 
                 # Store in session state
-                st.session_state.keystream = keystream
-                st.session_state.permutation_seed = permutation_seed
-                
-                st.success("✅ Quantum keys generated successfully!")
-                st.write(f"Keystream length: {len(keystream)} bytes")
-                st.write(f"Permutation seed: {permutation_seed}")
-            
-            with st.spinner("Encrypting image..."):
-                # Encrypt image
-                encryptor = ImageEncryptor(keystream, permutation_seed)
-                encrypted_array = encryptor.encrypt_image(original_array)
-                
-                # Store encrypted array
+                st.session_state.xor_key = xor_key
+                st.session_state.permutation_key = permutation_key
                 st.session_state.encrypted_array = encrypted_array
                 st.session_state.original_array = original_array
                 
-                st.success("✅ Image encrypted successfully!")
+                st.success("✅ Quantum keys generated and image encrypted!")
+                st.write(f"XOR key length: {len(xor_key)} bytes")
+                st.write(f"Permutation key size: {len(permutation_key)} elements")
         
         # Display encrypted image if available
         if 'encrypted_array' in st.session_state:
@@ -118,13 +128,12 @@ def main():
             st.header("3. Decryption")
             if st.button("🔓 Decrypt Image"):
                 with st.spinner("Decrypting image..."):
-                    # Decrypt image
-                    encryptor = ImageEncryptor(
-                        st.session_state.keystream,
-                        st.session_state.permutation_seed
-                    )
-                    decrypted_array = encryptor.decrypt_image(
-                        st.session_state.encrypted_array
+                    # Use the unified package's array-based decryption
+                    decryptor = ImageDecryptor()
+                    decrypted_array = decryptor.decrypt_array(
+                        st.session_state.encrypted_array,
+                        st.session_state.xor_key,
+                        st.session_state.permutation_key
                     )
                     
                     st.session_state.decrypted_array = decrypted_array

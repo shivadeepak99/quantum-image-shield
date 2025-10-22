@@ -1,0 +1,17 @@
+# Development and Testing Dependencies
+
+-r requirements.txt
+
+# Testing
+pytest==8.3.3
+pytest-cov==6.0.0
+pytest-asyncio==0.24.0
+
+# Code quality
+black==24.10.0
+flake8==7.1.1
+mypy==1.13.0
+isort==5.13.2
+
+# Statistical tests
+scipy==1.14.1

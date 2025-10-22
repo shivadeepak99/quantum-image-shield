@@ -16,6 +16,8 @@ class ImageDecryptor:
     The decryption process reverses:
     1. Pixel permutation (unshuffling)
     2. XOR operation with the same key
+    
+    Supports both file-based and array-based workflows.
     """
     
     def decrypt_image(self, encrypted_path: str, output_path: str, 
@@ -70,6 +72,35 @@ class ImageDecryptor:
         decrypted_img.save(output_path)
         
         return decrypted_array
+    
+    def decrypt_array(self, encrypted_array: np.ndarray, xor_key: bytes, 
+                     permutation_key: np.ndarray) -> np.ndarray:
+        """
+        Decrypt a numpy array directly (for in-memory processing).
+        
+        This method is useful for Streamlit apps, batch processing,
+        or when you want to work with arrays instead of files.
+        
+        Args:
+            encrypted_array: Encrypted numpy array
+            xor_key: XOR encryption key
+            permutation_key: Permutation indices
+            
+        Returns:
+            Decrypted numpy array with same shape as input
+        """
+        # Store original shape
+        original_shape = encrypted_array.shape
+        flat_encrypted = encrypted_array.flatten()
+        
+        # Step 1: Reverse the permutation (unshuffle)
+        unpermuted = self._unpermute_pixels(flat_encrypted, permutation_key)
+        
+        # Step 2: Apply XOR decryption (XOR is self-inverse)
+        decrypted = self._xor_decrypt(unpermuted, xor_key)
+        
+        # Reshape back to original shape
+        return decrypted.reshape(original_shape)
     
     def _unpermute_pixels(self, data: np.ndarray, permutation: np.ndarray) -> np.ndarray:
         """

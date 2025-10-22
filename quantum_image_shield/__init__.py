@@ -8,6 +8,17 @@ quantum-generated randomness with classical encryption techniques.
 from .quantum_key_generator import QuantumKeyGenerator
 from .encryption import ImageEncryptor
 from .decryption import ImageDecryptor
+from .security import SecurityHardening, SecureKeyStorage
+from .validators import ImageValidator, KeyFileValidator, EncryptionOptionsValidator
 
-__version__ = "1.0.0"
-__all__ = ["QuantumKeyGenerator", "ImageEncryptor", "ImageDecryptor"]
+__version__ = "2.0.0"
+__all__ = [
+    "QuantumKeyGenerator",
+    "ImageEncryptor", 
+    "ImageDecryptor",
+    "SecurityHardening",
+    "SecureKeyStorage",
+    "ImageValidator",
+    "KeyFileValidator",
+    "EncryptionOptionsValidator"
+]
