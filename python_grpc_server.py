@@ -14,8 +14,8 @@ from PIL import Image
 # Import our quantum core
 import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '../..'))
-from quantum_image_shield.encryption import ImageEncryption
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from quantum_image_shield.encryption import ImageEncryption  # type: ignore
 
 # Import generated protobuf (will be generated)
 # import quantum_pb2
