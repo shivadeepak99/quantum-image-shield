@@ -6,7 +6,6 @@ Protects against malicious files, exploits, and resource exhaustion attacks.
 """
 
 import os
-import imghdr
 from typing import Tuple, Optional
 from pathlib import Path
 from PIL import Image
@@ -119,11 +118,14 @@ class ImageValidator:
                     break
             
             if not is_valid_format:
-                # Try using imghdr as fallback
-                detected = imghdr.what(filepath)
-                if detected:
-                    is_valid_format = True
-                    detected_format = detected.upper()
+                # Try using PIL as fallback
+                try:
+                    with Image.open(filepath) as test_img:
+                        detected_format = test_img.format
+                        if detected_format:
+                            is_valid_format = True
+                except:
+                    pass
             
             if not is_valid_format:
                 return False, "File is not a valid image (magic bytes check failed)"

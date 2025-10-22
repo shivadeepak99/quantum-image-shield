@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quantum-image-shield"
+version = "2.0.0"
+description = "Enterprise-grade hybrid quantum-classical image encryption"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+authors = [
+    {name = "Your Name", email = "your.email@example.com"}
+]
+keywords = ["quantum", "encryption", "qiskit", "image", "security", "cryptography"]
+
+dependencies = [
+    "qiskit>=1.0.0",
+    "qiskit-aer>=0.13.0",
+    "Pillow>=10.0.0",
+    "numpy>=1.26.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=4.0.0",
+    "black>=24.0.0",
+    "flake8>=7.0.0",
+    "mypy>=1.0.0",
+]
+
+[project.scripts]
+quantum-shield = "quantum_image_shield.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["quantum_image_shield*"]
+exclude = ["tests*", "samples*", "docs*", "examples*", "scripts*"]
+
+[project.urls]
+Homepage = "https://github.com/your-username/quantum-image-shield"
+Documentation = "https://github.com/your-username/quantum-image-shield#readme"
+Repository = "https://github.com/your-username/quantum-image-shield"
