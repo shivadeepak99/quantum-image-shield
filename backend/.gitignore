@@ -1,0 +1,52 @@
+# Binaries
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+
+# Go build artifacts
+/backend
+/api
+/server
+*.out
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+/tmp/
+/temp/
+/uploads/
+*.tmp
+
+# Test coverage
+*.coverprofile
+coverage.html
+coverage.out
+
+# Vendor (if using vendoring)
+/vendor/
+
+# Air (hot reload)
+tmp/
+.air.toml
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db

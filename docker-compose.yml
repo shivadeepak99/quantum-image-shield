@@ -1,0 +1,139 @@
+version: '3.8'
+
+services:
+  # 🔮 Python Quantum gRPC Service
+  quantum-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.python
+    container_name: quantum-grpc
+    ports:
+      - "50051:50051"
+    environment:
+      - GRPC_PORT=50051
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./quantum_image_shield:/app/quantum_image_shield:ro
+    restart: unless-stopped
+    networks:
+      - quantum-net
+    healthcheck:
+      test: ["CMD", "python", "-c", "import grpc; grpc.channel_ready_future(grpc.insecure_channel('localhost:50051')).result(timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ⚡ Go API Server
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: quantum-api
+    ports:
+      - "8080:8080"
+      - "9090:9090"  # Metrics
+    environment:
+      - PORT=8080
+      - ENV=production
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=quantum
+      - DB_PASSWORD=quantum_secure_pass
+      - DB_NAME=quantum_shield
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - QUANTUM_SERVICE_HOST=quantum-service
+      - QUANTUM_SERVICE_PORT=50051
+      - JWT_SECRET=${JWT_SECRET:-change-this-in-production}
+    depends_on:
+      - postgres
+      - redis
+      - quantum-service
+    restart: unless-stopped
+    networks:
+      - quantum-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🐘 PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: quantum-postgres
+    environment:
+      - POSTGRES_USER=quantum
+      - POSTGRES_PASSWORD=quantum_secure_pass
+      - POSTGRES_DB=quantum_shield
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./backend/migrations:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - quantum-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U quantum"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 🔴 Redis Cache & Queue
+  redis:
+    image: redis:7-alpine
+    container_name: quantum-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - quantum-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 📊 Redis Commander (Dev tool)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    networks:
+      - quantum-net
+    profiles:
+      - dev
+
+  # 🗄️ pgAdmin (Dev tool)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: quantum-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@quantum.local
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_CONFIG_SERVER_MODE=False
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - quantum-net
+    profiles:
+      - dev
+
+networks:
+  quantum-net:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  redis-data:

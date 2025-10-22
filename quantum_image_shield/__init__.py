@@ -10,6 +10,7 @@ from .encryption import ImageEncryptor
 from .decryption import ImageDecryptor
 from .security import SecurityHardening, SecureKeyStorage
 from .validators import ImageValidator, KeyFileValidator, EncryptionOptionsValidator
+from . import analysis
 
 __version__ = "2.0.0"
 __all__ = [
@@ -20,5 +21,6 @@ __all__ = [
     "SecureKeyStorage",
     "ImageValidator",
     "KeyFileValidator",
-    "EncryptionOptionsValidator"
+    "EncryptionOptionsValidator",
+    "analysis"
 ]
