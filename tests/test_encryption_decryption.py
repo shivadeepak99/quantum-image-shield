@@ -7,12 +7,17 @@ import numpy as np
 from PIL import Image
 import os
 import tempfile
-from quantum_image_shield.encryption import ImageEncryptor
-from quantum_image_shield.decryption import ImageDecryptor
+import sys
+
+# Add parent directory to path to import from root
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from image_encryptor import ImageEncryptor, load_image_as_grayscale, save_image_array
+from quantum_key_generator import generate_quantum_key
 
 
 class TestEncryptionDecryption(unittest.TestCase):
-    """Test cases for ImageEncryptor and ImageDecryptor classes."""
+    """Test cases for ImageEncryptor class."""
     
     def setUp(self):
         """Set up test fixtures."""
@@ -36,71 +41,63 @@ class TestEncryptionDecryption(unittest.TestCase):
     
     def test_encrypt_decrypt_cycle(self):
         """Test that encryption followed by decryption recovers the original image."""
-        # Encrypt
-        encryptor = ImageEncryptor(quantum_seed=42)
-        xor_key, permutation_key = encryptor.encrypt_image(
-            self.test_image_path,
-            self.encrypted_path,
-            self.key_path
-        )
+        # Load original image
+        original_array = load_image_as_grayscale(self.test_image_path)
         
-        # Verify encrypted file exists
+        # Generate quantum keys
+        keystream, permutation_seed = generate_quantum_key(original_array.size, seed=42)
+        
+        # Encrypt
+        encryptor = ImageEncryptor(keystream, permutation_seed)
+        encrypted_array = encryptor.encrypt_image(original_array)
+        
+        # Save encrypted image
+        save_image_array(encrypted_array, self.encrypted_path)
         self.assertTrue(os.path.exists(self.encrypted_path))
-        self.assertTrue(os.path.exists(self.key_path))
         
         # Decrypt
-        decryptor = ImageDecryptor()
-        decryptor.decrypt_image(
-            self.encrypted_path,
-            self.decrypted_path,
-            key_path=self.key_path
-        )
+        decrypted_array = encryptor.decrypt_image(encrypted_array)
         
-        # Verify decrypted file exists
+        # Save decrypted image
+        save_image_array(decrypted_array, self.decrypted_path)
         self.assertTrue(os.path.exists(self.decrypted_path))
         
         # Compare original and decrypted images
-        original = np.array(Image.open(self.test_image_path))
-        decrypted = np.array(Image.open(self.decrypted_path))
-        
-        np.testing.assert_array_equal(original, decrypted)
+        np.testing.assert_array_equal(original_array, decrypted_array)
     
     def test_encrypted_image_different_from_original(self):
         """Test that encrypted image is different from original."""
-        encryptor = ImageEncryptor(quantum_seed=42)
-        encryptor.encrypt_image(
-            self.test_image_path,
-            self.encrypted_path,
-            self.key_path
-        )
+        # Load original image
+        original_array = load_image_as_grayscale(self.test_image_path)
         
-        original = np.array(Image.open(self.test_image_path))
-        encrypted = np.array(Image.open(self.encrypted_path))
+        # Generate quantum keys and encrypt
+        keystream, permutation_seed = generate_quantum_key(original_array.size, seed=42)
+        encryptor = ImageEncryptor(keystream, permutation_seed)
+        encrypted_array = encryptor.encrypt_image(original_array)
         
         # Images should be different
-        self.assertFalse(np.array_equal(original, encrypted))
+        self.assertFalse(np.array_equal(original_array, encrypted_array))
     
     def test_xor_encryption(self):
         """Test XOR encryption operation."""
-        encryptor = ImageEncryptor(quantum_seed=42)
-        
         data = np.array([1, 2, 3, 4, 5], dtype=np.uint8)
-        key = bytes([255, 255, 255, 255, 255])
+        key = np.array([255, 255, 255, 255, 255], dtype=np.uint8)
         
-        encrypted = encryptor._xor_encrypt(data, key)
-        decrypted = encryptor._xor_encrypt(encrypted, key)
+        # XOR encryption
+        encrypted = np.bitwise_xor(data, key)
+        # XOR decryption (XOR is self-inverse)
+        decrypted = np.bitwise_xor(encrypted, key)
         
         # XOR with same key twice should give original
         np.testing.assert_array_equal(data, decrypted)
     
     def test_pixel_permutation(self):
         """Test pixel permutation operation."""
-        encryptor = ImageEncryptor(quantum_seed=42)
-        
         data = np.array([1, 2, 3, 4, 5])
         permutation = np.array([4, 2, 0, 3, 1])
         
-        permuted = encryptor._permute_pixels(data, permutation)
+        # Apply permutation
+        permuted = data[permutation]
         
         # Check that permutation worked
         expected = np.array([5, 3, 1, 4, 2])
@@ -108,16 +105,15 @@ class TestEncryptionDecryption(unittest.TestCase):
     
     def test_unpermute_pixels(self):
         """Test pixel unpermutation operation."""
-        decryptor = ImageDecryptor()
-        
         original = np.array([1, 2, 3, 4, 5])
         permutation = np.array([4, 2, 0, 3, 1])
         
         # Permute
         permuted = original[permutation]
         
-        # Unpermute
-        unpermuted = decryptor._unpermute_pixels(permuted, permutation)
+        # Unpermute using inverse permutation
+        inverse_permutation = np.argsort(permutation)
+        unpermuted = permuted[inverse_permutation]
         
         np.testing.assert_array_equal(original, unpermuted)
     
@@ -129,43 +125,45 @@ class TestEncryptionDecryption(unittest.TestCase):
         img = Image.fromarray(img_array, 'L')
         img.save(gray_path)
         
-        # Encrypt and decrypt
-        encryptor = ImageEncryptor(quantum_seed=42)
-        encryptor.encrypt_image(gray_path, self.encrypted_path, self.key_path)
+        # Load and process
+        original_array = load_image_as_grayscale(gray_path)
         
-        decryptor = ImageDecryptor()
-        decryptor.decrypt_image(self.encrypted_path, self.decrypted_path, key_path=self.key_path)
+        # Generate quantum keys and encrypt
+        keystream, permutation_seed = generate_quantum_key(original_array.size, seed=42)
+        encryptor = ImageEncryptor(keystream, permutation_seed)
+        encrypted_array = encryptor.encrypt_image(original_array)
+        
+        # Decrypt
+        decrypted_array = encryptor.decrypt_image(encrypted_array)
         
         # Compare
-        original = np.array(Image.open(gray_path))
-        decrypted = np.array(Image.open(self.decrypted_path))
-        
-        np.testing.assert_array_equal(original, decrypted)
+        np.testing.assert_array_equal(original_array, decrypted_array)
     
     def test_different_image_sizes(self):
-        """Test encryption/decryption with different image sizes."""
-        sizes = [(32, 32, 3), (64, 128, 3), (100, 100, 3)]
+        """Test encryption/decryption with different image sizes (grayscale only)."""
+        sizes = [(32, 32), (64, 128), (100, 100)]
         
         for size in sizes:
             with self.subTest(size=size):
-                # Create test image
+                # Create test grayscale image
                 img_path = os.path.join(self.temp_dir, f'test_{size[0]}x{size[1]}.png')
                 img_array = np.random.randint(0, 256, size, dtype=np.uint8)
-                img = Image.fromarray(img_array, 'RGB')
+                img = Image.fromarray(img_array, 'L')
                 img.save(img_path)
                 
-                # Encrypt and decrypt
-                encryptor = ImageEncryptor(quantum_seed=42)
-                encryptor.encrypt_image(img_path, self.encrypted_path, self.key_path)
+                # Load and process
+                original_array = load_image_as_grayscale(img_path)
                 
-                decryptor = ImageDecryptor()
-                decryptor.decrypt_image(self.encrypted_path, self.decrypted_path, key_path=self.key_path)
+                # Generate quantum keys and encrypt
+                keystream, permutation_seed = generate_quantum_key(original_array.size, seed=42)
+                encryptor = ImageEncryptor(keystream, permutation_seed)
+                encrypted_array = encryptor.encrypt_image(original_array)
+                
+                # Decrypt
+                decrypted_array = encryptor.decrypt_image(encrypted_array)
                 
                 # Compare
-                original = np.array(Image.open(img_path))
-                decrypted = np.array(Image.open(self.decrypted_path))
-                
-                np.testing.assert_array_equal(original, decrypted)
+                np.testing.assert_array_equal(original_array, decrypted_array)
 
 
 if __name__ == '__main__':

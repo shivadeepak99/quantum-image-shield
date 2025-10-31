@@ -121,7 +121,9 @@ python -m quantum_image_shield.cli decrypt encrypted.png output.png --key encryp
 
 ### Python API
 ```python
-from quantum_image_shield import ImageEncryptor, ImageDecryptor
+from quantum_key_generator import QuantumKeyGenerator, generate_quantum_key
+from image_encryptor import ImageEncryptor, load_image_as_grayscale, save_image_array
+from image_analysis import analyze_image, calculate_psnr
 
 # Encrypt
 encryptor = ImageEncryptor()
