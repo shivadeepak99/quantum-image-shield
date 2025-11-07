@@ -1,7 +1,7 @@
 {
   "status": "success",
   "data": {
-    "upgraded": "Create and maintain a markdown (.md) file to document the audit performed, and append the audit report to this file, ensuring all relevant details and findings are accurately recorded and easily accessible for future reference.",
+    "upgraded": "We are a team of four members working on a project with a complex codebase and system. To ensure equal contribution and clear understanding, we need to divide the project into four manageable parts. Can you outline a suggested division of tasks among team members, and provide a clear explanation of each part, so we can effectively present our individual contributions to the teacher?",
     "plan": null,
     "diffs": null,
     "fidelity_score": null,
