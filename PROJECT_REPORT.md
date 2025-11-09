@@ -1140,9 +1140,9 @@ All metrics meet or exceed cryptographic standards:
 **References**: 25
 
 **Prepared By**: Quantum-Seed ImageShield Development Team  
-**Course Instructor**: [Instructor Name]  
+**Course Instructor**: Dr. Lincy Rubell Marion G 
 **Academic Year**: 2025-2026
 
 ---
 
-*This report is submitted in partial fulfillment of the requirements for [Course Code] - [Course Name]*
+*This report is submitted in partial fulfillment of the requirements for IEG313 Quantum Computing for Engineers: Theory and Applications
