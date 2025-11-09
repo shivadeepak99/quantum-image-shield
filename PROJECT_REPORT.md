@@ -43,7 +43,7 @@ The motivation for this research stems from several key observations:
 
 5. **Hybrid Approach Benefits**: Combining quantum key generation with efficient classical encryption algorithms provides both theoretical security advantages and computational practicality.
 
-### 1.3 Relevant Literature / Related Work
+### 1.3 Relevant Literature 
 
 **Quantum Random Number Generation**: 
 
@@ -146,28 +146,6 @@ Despite significant advances in both quantum computing and image encryption, sev
 - Correlation coefficient analysis (3 directions)
 - PSNR reconstruction validation
 - Visual comparative analysis
-
-### 3.5 User Accessibility
-
-**Gap**: Quantum cryptography tools are typically command-line based and require expert knowledge to operate.
-
-**Our Approach**: We developed an intuitive web-based interface (Streamlit) that allows:
-- Drag-and-drop image upload
-- One-click encryption/decryption
-- Real-time visualization of security metrics
-- Easy download of encrypted images and keys
-- Educational value through visual demonstrations
-
-### 3.6 Reproducibility and Open Science
-
-**Gap**: Limited availability of open-source quantum cryptography implementations with proper documentation.
-
-**Our Approach**: Complete open-source release with:
-- Detailed documentation
-- Installation guides
-- Example usage scripts
-- API documentation
-- Video tutorials
 
 ---
 
@@ -403,12 +381,6 @@ Where:
    - Low correlation → no spatial information preserved
    - Uniform histogram → no frequency analysis possible
 
-**Practical Security**:
-
-- Resistant to known-plaintext attacks (if key not reused)
-- Resistant to chosen-plaintext attacks (quantum randomness)
-- Resistant to frequency analysis (uniform distribution)
-- Vulnerable only if key is compromised (standard for symmetric encryption)
 
 ---
 
@@ -430,13 +402,6 @@ We created a synthetic test image with diverse characteristics to thoroughly eva
 
 **Rationale**: This synthetic image contains various spatial patterns and frequency components typical of natural images, allowing comprehensive evaluation of encryption across different image characteristics.
 
-**Additional Test Cases**:
-
-We also tested with:
-- Small images (32×32, 64×64) for performance testing
-- Medium images (128×128, 256×256) for standard evaluation
-- Larger images (512×512) for scalability testing
-- Various aspect ratios to ensure dimensional handling
 
 **Test Image Characteristics**:
 ```
@@ -629,10 +594,6 @@ Using statistical tests on generated keys:
    - Encrypted: Nearly perfect uniform distribution
    - **Interpretation**: Frequency analysis attacks rendered ineffective
 
-4. **Perfect Reconstruction**:
-   - PSNR = ∞ indicates zero error
-   - Bit-by-bit comparison: 100% match
-   - **Interpretation**: Lossless encryption confirmed
 
 ### 6.3 Visual Analysis
 
@@ -678,31 +639,7 @@ Encrypted Image (Horizontal):
 2. **Classical Efficiency**: Encryption/decryption operations are very fast
 3. **Optimization Opportunity**: Quantum circuit execution could be optimized or moved to real quantum hardware
 
-**Memory Usage**:
 
-- Peak RAM: ~200MB for 256×256 image
-- Includes: Qiskit simulator, image arrays, UI components
-- Scales linearly with image size
-
-### 6.5 Security Analysis Results
-
-**Cryptographic Strength Indicators**:
-
-| Security Test | Result | Status |
-|---------------|--------|--------|
-| Brute Force Resistance | 256^65536 key space | ✅ Excellent |
-| Frequency Analysis | Uniform histogram | ✅ Resistant |
-| Pattern Recognition | Zero correlation | ✅ Resistant |
-| Known-Plaintext Attack | Quantum randomness | ✅ Resistant |
-| Chosen-Plaintext Attack | Non-deterministic keys | ✅ Resistant |
-| Key Reuse Vulnerability | Single-use recommended | ⚠️ Standard limitation |
-
-**Statistical Validation**:
-
-All metrics meet or exceed cryptographic standards:
-- ✅ Entropy: 99.9% of theoretical maximum
-- ✅ Uniformity: 99.91% uniform distribution
-- ✅ Correlation: 0.12% of original (99.88% reduction)
 
 ### 6.6 Comparison with Related Work
 
