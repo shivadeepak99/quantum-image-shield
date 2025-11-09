@@ -641,7 +641,7 @@ Encrypted Image (Horizontal):
 
 
 
-### 6.6 Comparison with Related Work
+### 6.5 Comparison with Related Work
 
 | Feature | Our System | Traditional PRNG | Pure Quantum | Chaos-based |
 |---------|------------|------------------|--------------|-------------|
@@ -667,7 +667,7 @@ Encrypted Image (Horizontal):
 2. Requires network access for cloud quantum services (future)
 3. Current implementation uses simulator, not real quantum hardware
 
-### 6.7 Discussion
+### 6.6 Discussion
 
 **Why Our Results Matter**:
 
@@ -721,13 +721,13 @@ Encrypted Image (Horizontal):
 
 ### 7.2 Medium-Term Enhancements
 
-**5. Advanced Encryption Modes**
+**3. Advanced Encryption Modes**
 
 - **Block-based encryption**: Divide large images into blocks
 - **Streaming encryption**: Process images in chunks
 - **Adaptive encryption**: Adjust parameters based on image characteristics
 
-**6. Multiple Encryption Algorithms**
+**4. Multiple Encryption Algorithms**
 
 - **ChaCha20 integration**: Modern stream cipher option
 - **AES-GCM mode**: Authenticated encryption
@@ -737,14 +737,14 @@ Encrypted Image (Horizontal):
 
 ### 7.3 Long-Term Research Directions
 
-**9. Quantum Entanglement for Key Distribution**
+**5. Quantum Entanglement for Key Distribution**
 
 - **Goal**: Implement BB84 or E91 protocols
 - **Technology**: Quantum Key Distribution (QKD)
 - **Impact**: Information-theoretic security guarantees
 - **Challenge**: Requires quantum communication channels
 
-**10. Post-Quantum Cryptography Integration**
+**6. Post-Quantum Cryptography Integration**
 
 - **Motivation**: Resistance to quantum computer attacks
 - **Algorithms**: 
@@ -774,20 +774,5 @@ Encrypted Image (Horizontal):
 
 **END OF REPORT**
 
----
 
-## Document Metadata
 
-**Report Version**: 1.0  
-**Last Updated**: November 8, 2025  
-**Total Pages**: 25  
-**Word Count**: ~7,500  
-**Figures**: Multiple (histograms, correlation plots, architecture diagrams)  
-**Tables**: 15  
-**References**: 25
-
-**Prepared By**: Quantum-Seed ImageShield Development Team  
-**Course Instructor**: Dr. Lincy Rubell Marion G 
-**Academic Year**: 2025-2026
-
----
