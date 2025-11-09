@@ -780,23 +780,7 @@ All metrics meet or exceed cryptographic standards:
   - Inter-channel permutation for additional security
   - Maintained perfect reconstruction
 
-**3. Compression Integration**
 
-- **Current**: Uncompressed image encryption
-- **Future**: Encrypt-then-compress or compress-then-encrypt
-- **Benefits**: Reduced storage and transmission costs
-
-**4. Performance Optimization**
-
-- **Quantum Circuit Optimization**:
-  - Parallel circuit execution
-  - GPU-accelerated simulation
-  - Cached key generation for batch operations
-
-- **Encryption Speed**:
-  - SIMD vectorization for XOR operations
-  - Multi-threaded permutation
-  - Memory-mapped file I/O for large images
 
 ### 7.2 Medium-Term Enhancements
 
@@ -812,21 +796,7 @@ All metrics meet or exceed cryptographic standards:
 - **AES-GCM mode**: Authenticated encryption
 - **Hybrid combinations**: User-selectable encryption schemes
 
-**7. Key Management System**
 
-- **Secure key storage**: Encrypted key vault
-- **Key derivation functions**: PBKDF2 for password-based keys
-- **Key sharing protocols**: Secure multi-party key distribution
-- **Key rotation**: Automatic periodic key updates
-
-**8. Mobile Application**
-
-- **Platform**: iOS and Android apps
-- **Features**: 
-  - On-device encryption
-  - Cloud sync with end-to-end encryption
-  - QR code key exchange
-  - Biometric authentication
 
 ### 7.3 Long-Term Research Directions
 
@@ -846,105 +816,7 @@ All metrics meet or exceed cryptographic standards:
   - Code-based encryption
 - **Hybrid approach**: Combine quantum randomness with post-quantum algorithms
 
-**11. Homomorphic Properties**
 
-- **Goal**: Perform operations on encrypted images without decryption
-- **Applications**: 
-  - Cloud image processing while maintaining privacy
-  - Secure machine learning on encrypted data
-  - Privacy-preserving image analytics
-
-**12. Blockchain Integration**
-
-- **Key timestamping**: Immutable record of key generation
-- **Decentralized key storage**: Distributed key shards
-- **Audit trails**: Cryptographic proof of encryption events
-- **Smart contracts**: Automated encryption workflows
-
-### 7.4 Security Enhancements
-
-**13. Multi-Factor Authentication**
-
-- **Biometric keys**: Fingerprint/face recognition combined with quantum keys
-- **Hardware tokens**: FIDO2/WebAuthn integration
-- **Time-based OTP**: Additional authentication layer
-
-**14. Steganography Integration**
-
-- **Goal**: Hide encrypted images within innocuous cover images
-- **Methods**: LSB substitution with quantum-randomized carrier selection
-- **Benefits**: Plausible deniability, covert communication
-
-**15. Quantum Random Number Certification**
-
-- **Validation**: Formal randomness testing (NIST suite)
-- **Certification**: Third-party quantum randomness verification
-- **Standards compliance**: ISO/IEC standards for cryptographic RNGs
-
-### 7.5 Academic and Research Extensions
-
-**16. Formal Security Proof**
-
-- **Goal**: Mathematical proof of security under specific threat models
-- **Methods**: Information-theoretic analysis, computational security reductions
-- **Publication**: Peer-reviewed security analysis
-
-**17. Large-Scale Performance Study**
-
-- **Dataset**: ImageNet, COCO, medical imaging databases
-- **Metrics**: 
-  - Statistical analysis on 10,000+ diverse images
-  - Performance benchmarking across image categories
-  - Comparative study with state-of-the-art methods
-
-**18. Quantum Machine Learning Integration**
-
-- **Quantum neural networks**: For adaptive encryption parameters
-- **Quantum classifiers**: Detect encryption strength automatically
-- **Quantum feature extraction**: Image-dependent key generation
-
-**19. Cross-Domain Applications**
-
-- **Video encryption**: Extend to video streams
-- **Audio encryption**: Apply to voice/music files
-- **3D model encryption**: Secure CAD and 3D printing files
-- **Document encryption**: PDF and office file protection
-
-### 7.6 Usability and Adoption
-
-**20. API and SDK Development**
-
-- **RESTful API**: Cloud-based encryption service
-- **Python SDK**: Easy integration into existing applications
-- **JavaScript library**: Browser-based encryption
-- **CLI tools**: Command-line interface for automation
-
-**21. Cloud Service Platform**
-
-- **SaaS offering**: Quantum encryption as a service
-- **Pay-per-use model**: Scalable pricing
-- **Enterprise features**: Team management, audit logs, compliance reporting
-
-**22. Educational Platform**
-
-- **Interactive tutorials**: Learn quantum cryptography through practice
-- **Visualization tools**: Animated explanations of quantum circuits
-- **Curriculum integration**: Materials for university courses
-- **Certification program**: Quantum cryptography certification
-
-### 7.7 Interdisciplinary Collaboration
-
-**23. Quantum Hardware Partners**
-
-- **IBM Quantum**: Access to latest quantum processors
-- **Google Quantum AI**: Sycamore processor integration
-- **IonQ, Rigetti**: Alternative quantum platforms
-
-**24. Standards Development**
-
-- **NIST collaboration**: Contribute to quantum-safe standards
-- **IEEE participation**: Quantum encryption protocol standardization
-- **ISO working groups**: International cryptography standards
 
 ---
 
@@ -960,119 +832,8 @@ All metrics meet or exceed cryptographic standards:
 
 [5] C. E. Shannon, "Communication theory of secrecy systems," *Bell System Technical Journal*, vol. 28, no. 4, pp. 656-715, Oct. 1949.
 
-[6] W. W. Hu, R. G. Zhou, J. Luo, and S. X. Jiang, "Quantum image encryption scheme based on quantum image  scrambling and quantum chaotic system," *Quantum Information Processing*, vol. 20, article 271, Aug. 2021.
-
-[7] N. R. Zhou, A. W. Hua, T. X. Jiang, and B. Chen, "Quantum image encryption based on generalized Arnold transform and double random-phase encoding," *Quantum Information Processing*, vol. 14, no. 4, pp. 1193-1213, Apr. 2015.
-
-[8] Y. Wu, J. P. Noonan, and S. Agaian, "NPCR and UACI randomness tests for image encryption," *Cyber Journals: Multidisciplinary Journals in Science and Technology, Journal of Selected Areas in Telecommunications (JSAT)*, pp. 31-38, Apr. 2011.
-
-[9] IBM Quantum, "Qiskit: An open-source framework for quantum computing," 2021. [Online]. Available: https://qiskit.org/
-
-[10] A. K. Ekert, "Quantum cryptography based on Bell's theorem," *Physical Review Letters*, vol. 67, no. 6, pp. 661-663, Aug. 1991.
-
-[11] C. H. Bennett and G. Brassard, "Quantum cryptography: Public key distribution and coin tossing," in *Proc. IEEE Int. Conf. Computers, Systems and Signal Processing*, Bangalore, India, Dec. 1984, pp. 175-179.
-
-[12] L. Liu, Q. Zhang, and X. Wei, "A RGB image encryption algorithm based on DNA encoding and chaos map," *Computers & Electrical Engineering*, vol. 38, no. 5, pp. 1240-1248, Sep. 2012.
-
-[13] X. Wang and D. Luan, "A novel image encryption algorithm using chaos and reversible cellular automata," *Communications in Nonlinear Science and Numerical Simulation*, vol. 18, no. 11, pp. 3075-3085, Nov. 2013.
-
-[14] G. Chen, Y. Mao, and C. K. Chui, "A symmetric image encryption scheme based on 3D chaotic cat maps," *Chaos, Solitons & Fractals*, vol. 21, no. 3, pp. 749-761, Jul. 2004.
-
-[15] Z. Hua, Y. Zhou, and H. Huang, "Cosine-transform-based chaotic system for image encryption," *Information Sciences*, vol. 480, pp. 403-419, Apr. 2019.
-
-[16] L. Y. Zhang, Y. Liu, F. Pareschi, Y. Zhang, K. W. Wong, R. Rovatti, and G. Setti, "On the security of a class of diffusion mechanisms for image encryption," *IEEE Transactions on Cybernetics*, vol. 48, no. 4, pp. 1163-1175, Apr. 2018.
-
-[17] R. Enayatifar, A. H. Abdullah, and I. F. Isnin, "Chaos-based image encryption using a hybrid genetic algorithm and a DNA sequence," *Optics and Lasers in Engineering*, vol. 56, pp. 83-93, May 2014.
-
-[18] X. Chai, Y. Chen, and L. Broyde, "A novel chaos-based image encryption algorithm using DNA sequence operations," *Optics and Lasers in Engineering*, vol. 88, pp. 197-213, Jan. 2017.
-
-[19] H. Liu, A. Kadir, and Y. Niu, "Chaos-based color image block encryption scheme using S-box," *AEU - International Journal of Electronics and Communications*, vol. 68, no. 7, pp. 676-686, Jul. 2014.
-
-[20] Y. Zhou, L. Bao, and C. L. P. Chen, "A new 1D chaotic system for image encryption," *Signal Processing*, vol. 97, pp. 172-182, Apr. 2014.
-
-[21] National Institute of Standards and Technology, "A Statistical Test Suite for Random and Pseudorandom Number Generators for Cryptographic Applications," NIST Special Publication 800-22 Rev. 1a, Apr. 2010.
-
-[22] M. A. Nielsen and I. L. Chuang, *Quantum Computation and Quantum Information*, 10th Anniversary ed. Cambridge, U.K.: Cambridge Univ. Press, 2010.
-
-[23] IBM, "IBM Quantum Experience," 2023. [Online]. Available: https://quantum-computing.ibm.com/
-
-[24] P. W. Shor, "Algorithms for quantum computation: Discrete logarithms and factoring," in *Proc. 35th Annual Symp. Foundations of Computer Science*, Santa Fe, NM, USA, Nov. 1994, pp. 124-134.
-
-[25] L. K. Grover, "A fast quantum mechanical algorithm for database search," in *Proc. 28th Annual ACM Symp. Theory of Computing*, Philadelphia, PA, USA, May 1996, pp. 212-219.
-
 ---
 
-## Appendix A: Code Repository
-
-**GitHub Repository**: https://github.com/shivadeepak99/quantum-image-shield
-
-**Repository Contents**:
-- Complete source code
-- Unit test suite
-- Documentation
-- Example images
-- Installation guide
-- Video tutorials
-
-**License**: MIT License (Open Source)
-
----
-
-## Appendix B: Statistical Analysis Tables
-
-### Table B.1: Detailed Entropy Analysis
-
-| Image Type | Mean Entropy | Std Dev | Min | Max |
-|------------|--------------|---------|-----|-----|
-| Original Images | 7.532 | 0.124 | 7.301 | 7.689 |
-| Encrypted Images | 7.994 | 0.003 | 7.989 | 7.999 |
-
-### Table B.2: Correlation Coefficients Across Directions
-
-| Direction | Original | Encrypted | Reduction (%) |
-|-----------|----------|-----------|---------------|
-| Horizontal | 0.9895 | 0.0028 | 99.72% |
-| Vertical | 0.9901 | -0.0021 | 99.79% |
-| Diagonal | 0.9826 | -0.0071 | 99.28% |
-
-### Table B.3: Performance Benchmarks
-
-| Image Size | Key Gen (s) | Encrypt (s) | Decrypt (s) | Total (s) |
-|------------|-------------|-------------|-------------|-----------|
-| 32×32 | 2.1 | 0.02 | 0.02 | 2.14 |
-| 64×64 | 3.8 | 0.04 | 0.04 | 3.88 |
-| 128×128 | 8.5 | 0.11 | 0.11 | 8.72 |
-| 256×256 | 28.3 | 0.31 | 0.31 | 28.92 |
-
----
-
-## Appendix C: Acronyms and Abbreviations
-
-- **AES**: Advanced Encryption Standard
-- **API**: Application Programming Interface
-- **BB84**: Bennett-Brassard 1984 (QKD protocol)
-- **CLI**: Command Line Interface
-- **GCM**: Galois/Counter Mode
-- **GUI**: Graphical User Interface
-- **HMAC**: Hash-based Message Authentication Code
-- **NIST**: National Institute of Standards and Technology
-- **NPCR**: Number of Pixel Change Rate
-- **OTP**: One-Time Pad
-- **PBKDF2**: Password-Based Key Derivation Function 2
-- **PNG**: Portable Network Graphics
-- **PRNG**: Pseudo-Random Number Generator
-- **PSNR**: Peak Signal-to-Noise Ratio
-- **QKD**: Quantum Key Distribution
-- **QRNG**: Quantum Random Number Generator
-- **RGB**: Red Green Blue (color model)
-- **RGBA**: Red Green Blue Alpha
-- **SDK**: Software Development Kit
-- **UACI**: Unified Average Changing Intensity
-- **UI**: User Interface
-- **UX**: User Experience
-- **XOR**: Exclusive OR (logical operation)
-
----
 
 **END OF REPORT**
 
@@ -1093,5 +854,3 @@ All metrics meet or exceed cryptographic standards:
 **Academic Year**: 2025-2026
 
 ---
-
-*This report is submitted in partial fulfillment of the requirements for IEG313 Quantum Computing for Engineers: Theory and Applications
