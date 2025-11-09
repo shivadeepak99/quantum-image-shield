@@ -1,8 +1,8 @@
 # Quantum-Seed ImageShield: A Hybrid Quantum-Classical Image Encryption System
 
-**Authors**: [Member 1 Name], [Member 2 Name], [Member 3 Name], [Member 4 Name]  
-**Institution**: [Your Institution Name]  
-**Course**: [Course Name/Code]  
+**Authors**: 2023BCD0048 SHANIGARAM SHIVA DEEPAK , 2023BCD0057 BHUPALAM YASWANTH SAI , 2023BCD0003 NOOH K , 2023BCS0036 HARIPRASANTH M 
+**Institution**:IIIT-KOTTAYAM
+**Course**: IEG313 Quantum Computing for Engineers: Theory and Applications
 **Date**: November 8, 2025
 
 ---
