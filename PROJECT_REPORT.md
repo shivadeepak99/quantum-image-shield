@@ -412,7 +412,7 @@ Where:
 
 ---
 
-## 5. Experimental Details
+## 5. Implementation  Details
 
 ### 5.1 Dataset Description
 
@@ -447,7 +447,7 @@ Original Test Image Statistics:
 - Spatial correlation: High (0.98-0.99)
 ```
 
-### 5.2 Experimental Setup
+### 5.2 Implementational Setup
 
 **Hardware Configuration**:
 
@@ -519,58 +519,7 @@ Qiskit is IBM's open-source quantum computing framework providing:
 - Accessible through free cloud services
 - Suitable for both research and education
 
-### 5.4 Testing Methodology
-
-**Unit Testing**:
-
-We implemented comprehensive unit tests covering:
-
-1. **Quantum Key Generator Tests** (7 tests):
-   - Bit generation correctness
-   - Variable length handling
-   - Keystream byte conversion
-   - Permutation seed generation
-   - Reproducibility with seeds
-   - Randomness validation
-
-2. **Encryption/Decryption Tests** (7 tests):
-   - Full encryption-decryption cycle
-   - Encrypted ≠ original verification
-   - XOR operation correctness
-   - Permutation logic validation
-   - Inverse permutation accuracy
-   - Grayscale image handling
-   - Multiple image size support
-
-**Test Execution**:
-```bash
-python -m pytest tests/ -v --cov=.
-```
-
-**Integration Testing**:
-
-Full system workflow test:
-```bash
-python test_encryption.py
-```
-
-Validates:
-- Image loading
-- Key generation
-- Encryption
-- Decryption
-- Perfect reconstruction
-- Statistical analysis
-
-**Performance Testing**:
-
-Measured:
-- Key generation time vs. image size
-- Encryption/decryption speed
-- Memory usage
-- UI responsiveness
-
-### 5.5 Experimental Procedure
+### 5.4 Implementational Procedure
 
 **Step-by-Step Workflow**:
 
@@ -617,13 +566,7 @@ Measured:
    - Generate comparison plots
    - Export results
 
-**Reproducibility**:
 
-All experiments can be reproduced using:
-- Seed values for deterministic testing
-- Version-controlled codebase
-- Documented parameter settings
-- Automated test scripts
 
 ---
 
