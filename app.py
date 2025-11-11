@@ -69,7 +69,7 @@ def main():
             col1, col2, col3 = st.columns(3)
             with col1:
                 st.subheader("Original Image")
-                st.image(original_array, caption="Original Image", use_container_width=True)
+                st.image(original_array, caption="Original Image", use_column_width=True)
                 st.write(f"Size: {original_array.shape[1]} × {original_array.shape[0]} pixels")
 
             st.header("2. Quantum Key Generation & Encryption")
@@ -102,7 +102,7 @@ def main():
                     st.image(
                         st.session_state.encrypted_array,
                         caption="Encrypted Image",
-                        use_container_width=True
+                        use_column_width=True
                     )
                     # Prepare encrypted image bytes
                     encrypted_img_bytes = array_to_image_bytes(st.session_state.encrypted_array)
@@ -149,7 +149,7 @@ def main():
                         st.image(
                             st.session_state.decrypted_array,
                             caption="Decrypted Image",
-                            use_container_width=True
+                            use_column_width=True
                         )
                     psnr = calculate_psnr(
                         st.session_state.original_array,
@@ -286,9 +286,9 @@ def main():
                 encrypted_array = encrypted_array.reshape(shape)
 
             st.subheader("Encrypted Image Preview")
-            st.image(encrypted_array, caption="Encrypted Image", use_container_width=True)
+            st.image(encrypted_array, caption="Encrypted Image", use_column_width=True)
 
-            if st.button("� Decrypt Uploaded Image", key="decrypt_btn_uploaded"):
+            if st.button("🔓 Decrypt Uploaded Image", key="decrypt_btn_uploaded"):
                 with st.spinner("Decrypting uploaded image..."):
                     encryptor = ImageEncryptor(keystream, permutation_key)
                     decrypted_array = encryptor.decrypt_image(encrypted_array)
@@ -297,7 +297,7 @@ def main():
 
             if 'decrypted_uploaded_array' in st.session_state:
                 st.subheader("Decrypted Image Preview")
-                st.image(st.session_state.decrypted_uploaded_array, caption="Decrypted Image", use_container_width=True)
+                st.image(st.session_state.decrypted_uploaded_array, caption="Decrypted Image", use_column_width=True)
         else:
             st.info("👆 Please upload both encrypted image and key file to decrypt.")
     
