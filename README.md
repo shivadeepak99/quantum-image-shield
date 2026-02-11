@@ -2,6 +2,7 @@
 
 A hybrid quantum-classical image encryption system that leverages quantum-generated randomness to enhance security and unpredictability in digital image encryption.
 
+
 ## 🌟 Overview
 
 **Quantum-Seed ImageShield** combines quantum key generation using IBM's Qiskit platform with classical encryption techniques (XOR operations and pixel permutations) to demonstrate a practical application of quantum computing in modern cryptography.
