@@ -56,3 +56,5 @@ temp/
 # Environment
 .env
 .env.local
+samples/sample_image.png
+VIVA_QNA.md
