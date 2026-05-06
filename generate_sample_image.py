@@ -2,7 +2,8 @@
 Generate a sample test image for demonstration.
 """
 
-from PIL import Image, ImageDraw, ImageFont
+import os
+from PIL import Image, ImageDraw
 import numpy as np
 
 
@@ -33,6 +34,9 @@ def create_sample_image():
         # If font fails, just add more patterns
         draw.rectangle([60, 180, 190, 220], fill=50, outline=50)
     
+    # Ensure output directory exists
+    os.makedirs('samples', exist_ok=True)
+
     # Save the image
     image.save('samples/sample_image.png')
     print("Sample image created: samples/sample_image.png")
